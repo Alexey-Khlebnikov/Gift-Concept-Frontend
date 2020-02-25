@@ -24,7 +24,7 @@ class AuthService extends EventEmitter {
   }
 
   localLogin(authResult) {
-    console.log(authResult);
+    console.log(authResult)
     this.profile = authResult.payload;
     let expiredCycle = this.profile.expireCycle * 1000 * 60;
     if(this.timer) clearInterval(this.timer);
@@ -35,19 +35,21 @@ class AuthService extends EventEmitter {
     this.tokenExpiry = Date.now() + expiredCycle;
     localStorage.setItem(tokenExpiryKey, this.tokenExpiry);
     localStorage.setItem(localStorageKey, 'true');
+    var oldIsActivated = this.isActivated
     this.updateUserData(this.profile);
 
     this.emit(loginEvent, {
       loggedIn: true,
       profile: this.profile,
-      state: authResult.appState || {}
+      state: authResult.appState || {},
+      activateChanged: oldIsActivated != this.isActivated && this.isActivated
     });
   }
 
   renewTokens() {
     userApi.renewTokens().then(authResult => {
       if (authResult)
-        this.localLogin(authResult);
+        this.localLogin({payload: authResult});
     })
       .catch(error => {
         if (error.code == 'Token Expired') {

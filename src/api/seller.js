@@ -15,6 +15,9 @@ class API extends Parent {
 
     return this.post('register', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
   }
+  allDrivers() {
+      return this.post('allDrivers')
+  }
 }
 
 export default new API("seller");

@@ -12,6 +12,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import router from '@/router'
 import sellerApi from '@/api/seller'
+import driverApi from "@/api/driver"
 import userApi from '@/api/user'
 import adminApi from '@/api/admin'
 import authService from '@/auth/authService'
@@ -19,9 +20,10 @@ import authService from '@/auth/authService'
 export default {
 
   registerUser({ dispatch }, payload) {
-    return sellerApi.register(payload.userDetails)
+    var { userDetails, notify } = payload
+    return dispatch('registerAttempt', userDetails)
       .then(() => {
-        payload.notify({
+        notify({
           title: 'Account Created',
           text: 'You are successfully registered!',
           iconPack: 'feather',
@@ -29,13 +31,13 @@ export default {
           color: 'success'
         });
         const newPayload = {
-          userDetails: payload.userDetails,
-          notify: payload.notify
+          userDetails: userDetails,
+          notify
         }
         return dispatch('loginAttempt', newPayload)
       })
       .catch((error) => {
-        payload.notify({
+        notify({
           title: `Error: ${error.code}`,
           text: error.message,
           iconPack: 'feather',
@@ -43,6 +45,14 @@ export default {
           color: 'danger'
         });
       })
+  },
+
+  registerAttempt({}, userDetails) {
+    if (userDetails.role == 'seller') {
+      return sellerApi.register(userDetails)
+    } else {
+      return driverApi.register(userDetails)
+    }
   },
 
   async adminSetup({ state }, payload) {

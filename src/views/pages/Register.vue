@@ -22,8 +22,18 @@
                     :subtitle="null"
                     finishButtonText="Submit"
                   >
+                    <tab-content title="Step 1" class="mb-5" icon="feather icon-server">
+                      <form data-vv-scope="step-1">
+                        <div class="role">
+                          <vs-radio v-model="user.role" vs-value="seller">I am a seller</vs-radio>
+                        </div>
+                        <div class="role">
+                          <vs-radio v-model="user.role" vs-value="driver">I am a driver</vs-radio>
+                        </div>
+                      </form>
+                    </tab-content>
                     <tab-content
-                      title="Step 1"
+                      title="Step 2"
                       class="mb-5"
                       icon="feather icon-home"
                       :before-change="validateStep1"
@@ -34,7 +44,7 @@
                             <vs-input
                               size="large"
                               label="Your Name"
-                              v-model="seller.name"
+                              v-model="user.name"
                               class="w-full"
                               name="name"
                               v-validate="'required|alpha'"
@@ -46,7 +56,7 @@
                               type="email"
                               size="large"
                               label="Email"
-                              v-model="seller.email"
+                              v-model="user.email"
                               class="w-full"
                               name="email"
                               v-validate="'required|email'"
@@ -61,7 +71,7 @@
                               ref="password"
                               label="Your Password"
                               name="password"
-                              v-model="seller.password"
+                              v-model="user.password"
                               class="mt-5 w-full"
                             />
                             <span
@@ -90,7 +100,7 @@
                     </tab-content>
 
                     <tab-content
-                      title="Step 2"
+                      title="Step 3"
                       class="mb-5"
                       icon="feather icon-briefcase"
                       :before-change="validateStep2"
@@ -101,7 +111,7 @@
                             <vs-input
                               size="large"
                               label="Commercial Record"
-                              v-model="seller.commercialRecord"
+                              v-model="user.commercialRecord"
                               class="w-full"
                               name="commercial_record"
                               v-validate="'required'"
@@ -159,7 +169,7 @@
                     </tab-content>
 
                     <tab-content
-                      title="Step 3"
+                      title="Step 4"
                       class="mb-5"
                       icon="feather icon-image"
                       :before-change="validateStep3"
@@ -169,7 +179,7 @@
                           <div class="vx-col w-full">
                             <vs-input
                               label="City/Cities *"
-                              v-model="seller.city"
+                              v-model="user.city"
                               class="w-full mt-5"
                               name="city"
                               v-validate="'required'"
@@ -178,7 +188,7 @@
                           </div>
                           <div class="vx-col w-full">
                             <vs-select
-                              v-model="seller.neighborhood"
+                              v-model="user.neighborhood"
                               class="w-full select-large mt-5"
                               label="Event Location"
                             >
@@ -193,7 +203,7 @@
                           </div>
                           <div class="vx-col w-full mt-5">
                             <vs-select
-                              v-model="seller.branch"
+                              v-model="user.branch"
                               class="w-full select-large"
                               label="Branches"
                             >
@@ -208,7 +218,7 @@
                           </div>
                           <div class="vx-col w-full">
                             <vs-select
-                              v-model="seller.country"
+                              v-model="user.country"
                               class="w-full select-large mt-5"
                               label="country"
                             >
@@ -279,14 +289,13 @@ Validator.localize("en", dict);
 export default {
   data() {
     return {
-      seller: {
+      user: {
+        role: "seller",
         name: "Sotnikov",
         email: "sotnikov.uri@gmail.com",
         password: "123456",
-
         commercialRecord: "sample commercial record",
         licenseImage: null,
-
         city: "new-york",
         neighborhood: "new-york",
         branch: "plannning",
@@ -355,9 +364,9 @@ export default {
       this.$refs.licenseIamge.click();
     },
     selectedLicenseImage(e) {
-      this.seller.licenseImage = null;
-      if (e.target.files && (this.seller.licenseImage = e.target.files[0])) {
-        this.licenseSrc = URL.createObjectURL(this.seller.licenseImage);
+      this.user.licenseImage = null;
+      if (e.target.files && (this.user.licenseImage = e.target.files[0])) {
+        this.licenseSrc = URL.createObjectURL(this.user.licenseImage);
         this.license = "true";
       } else {
         this.licenseSrc = null;
@@ -368,7 +377,7 @@ export default {
       this.$refs.licenseIamge.value = "";
       this.licenseSrc = null;
       this.license = "";
-      this.seller.licenseImage = null;
+      this.user.licenseImage = null;
     },
     async register() {
       if (this.$auth.isAuthenticated) {
@@ -378,7 +387,7 @@ export default {
       this.$vs.loading({ type: "radius" });
 
       const payload = {
-        userDetails: this.seller,
+        userDetails: this.user,
         notify: this.$vs.notify,
         acl: this.$acl
       };
@@ -403,3 +412,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.role {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+</style>

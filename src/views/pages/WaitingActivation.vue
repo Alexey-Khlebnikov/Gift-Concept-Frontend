@@ -31,22 +31,29 @@
 
 
 <script>
-
 export default {
   sockets: {
-      user_activated: function (activated) {
-        let user = this.$auth.Me
-        user.activated = activated
-        this.$auth.updateUserData(user);
-        console.log(this.$router);
-        this.$router.push({path: this.$router.currentRoute.query.to || '/'})
-      },
+    user_activated: function(activated) {
+      let user = this.$auth.Me;
+      user.activated = activated;
+      this.$auth.updateUserData(user);
+      console.log(this.$router);
+      this.$router.push({ path: this.$router.currentRoute.query.to || "/" });
+    }
+  },
+  created() {
+    if (!this.$auth.isAuthenticated) {
+      this.$router.push({
+        path: "/login",
+        query: { to: this.$router.currentRoute.query.to }
+      });
+    } else if (this.$auth.isActivated) {
+      this.$router.push({ path: this.$router.currentRoute.query.to || "/" });
+    }
   },
   methods: {
     refresh() {}
   },
-  mounted() {
-    console.log("mounted");
-  }
+  mounted() {}
 };
 </script>

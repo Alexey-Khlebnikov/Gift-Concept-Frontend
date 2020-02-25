@@ -53,7 +53,7 @@
           <vs-button class="mb-4 md:mb-0" @click="gridApi.exportDataAsCsv()">Export as CSV</vs-button>
         </div>
       </div>
-      
+
       <ag-grid-vue
         @grid-ready="onGridReady"
         :gridOptions="gridOptions"
@@ -78,7 +78,7 @@
 import { AgGridVue } from "ag-grid-vue";
 const VxTour = () => import("@/components/VxTour.vue");
 
-import sellerApi from "@/api/seller";
+import driverApi from "@/api/driver";
 import Child from "@/components/admin/Child"
 
 import "@/assets/scss/vuesax/extraComponents/agGridStyleOverride.scss";
@@ -234,7 +234,7 @@ export default {
       return '<vs-button radius color="danger" type="gradient" icon-pack="feather" icon="icon-user-plus"></vs-button>';
     },
     loadData() {
-      sellerApi.allDrivers().then(data => {
+      driverApi.allDrivers().then(data => {
         this.drivers = data;
       });
     },

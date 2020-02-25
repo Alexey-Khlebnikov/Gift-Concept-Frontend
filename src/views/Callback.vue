@@ -15,6 +15,7 @@
 export default {
     methods: {
         handleLoginEvent(data) {
+          alert("OK");
             this.$store.dispatch('auth/updateAuthenticatedUser', {
                 displayName: data.profile.name,
                 email: data.profile.email,

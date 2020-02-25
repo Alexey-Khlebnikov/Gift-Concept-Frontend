@@ -10,6 +10,9 @@ class API extends Parent {
   newSellers() {
     return this.post('newSellers')
   }
+  newDrivers() {
+    return this.post('newDrivers')
+  }
   approveUser(userId) {
     return this.post('approve', {userId})
   }

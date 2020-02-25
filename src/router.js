@@ -84,6 +84,24 @@ const router = new Router({
           }
         },
 
+        {
+          path: '/admin/users/driver',
+          name: 'adminDriverList',
+          component: () => import('@/views/admin/driver/DriverList.vue'),
+          meta: {
+            rule: 'admin'
+          }
+        },
+
+        {
+          path: '/admin/users/driver/new',
+          name: 'adminNewDrivers',
+          component: () => import('@/views/admin/driver/NewDrivers.vue'),
+          meta: {
+            rule: 'admin'
+          }
+        },
+
 
 
         {
@@ -123,6 +141,24 @@ const router = new Router({
           component: () => import('./views/seller/ProductList.vue'),
           meta: {
             rule: 'seller'
+          }
+        },
+      ]
+    },
+
+    // ////////////////////////////
+    // Driver Full Side
+    // ////////////////////////////
+    {
+      path: '',
+      component: () => import('@/layouts/main/Seller.vue'),
+      children: [
+        {
+          path: '/driver',
+          name: 'driverHome',
+          component: () => import('./views/seller/Home.vue'),
+          meta: {
+            rule: 'driver'
           }
         },
       ]

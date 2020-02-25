@@ -32,7 +32,6 @@ export default {
   },
   sockets: {
     CONNECT: function() {
-      this.$socket.emit("register", {});
     }
   },
   methods: {
@@ -55,9 +54,16 @@ export default {
     handleWindowResize(event) {
       this.$store.dispatch("updateWindowWidth", event.currentTarget.innerWidth);
     },
-    handleLoginEvent({ loggedIn, autoLogout }) {
+    handleLoginEvent({ loggedIn, autoLogout, activateChanged }) {
       if (loggedIn) {
         this.$acl.change(this.$auth.userRole);
+        if (activateChanged) {
+          if (this.$auth.isActivated) {
+            this.$router.push({ path: this.$router.currentRoute.query.to || "/" });
+          } else {
+            return router.push({path: '/pages/waiting-activation', query: {to: this.$router.currentRoute.path}})
+          }
+        }
       } else {
         if (!this.$router.currentRoute.meta.rule || this.$router.currentRoute.meta.rule == "anonymous") return;
         this.$acl.change("anonymous");

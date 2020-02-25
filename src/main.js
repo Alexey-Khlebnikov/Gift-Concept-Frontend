@@ -19,7 +19,6 @@ import 'material-icons/iconfont/material-icons.css' //Material Icons
 import 'vuesax/dist/vuesax.css'; // Vuesax
 Vue.use(Vuesax)
 
-
 // axios
 import axios from 'axios'
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
@@ -28,6 +27,8 @@ Vue.prototype.$http = axios
 // Theme Configurations
 import '../themeConfig.js'
 
+import $global from "./plugins/global"
+Vue.use($global)
 
 // Algolia - Instant Search
 import InstantSearch from 'vue-instantsearch';
@@ -41,6 +42,7 @@ import '@/firebase/firebaseConfig'
 // Auth0 Plugin
 import AuthPlugin from "./plugins/auth";
 Vue.use(AuthPlugin);
+
 
 
 // ACL
